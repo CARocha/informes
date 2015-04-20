@@ -85,5 +85,20 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/'
 LOGOUT_URL = '/'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+        'django.contrib.auth.context_processors.auth',
+        "allauth.account.context_processors.account",
+        #"allauth.socialaccount.context_processors.socialaccount",
+        'django.core.context_processors.debug',
+        'django.core.context_processors.i18n',
+        'django.core.context_processors.media',
+        'django.core.context_processors.static',
+        'django.core.context_processors.tz',
+        'django.contrib.messages.context_processors.messages',
+        'django.core.context_processors.request',
+        # Your stuff: custom template context processers go here
+    )

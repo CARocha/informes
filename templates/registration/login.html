@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% load url from future %}
+
+{% block contenido %}
+
+ <!-- START Template Container -->
+<div class="container-fluid">
+    <!-- START Row -->
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            <div class="page-header page-header-block">
+                <div class="page-header-section">
+                    <h4 class="title semibold">{% trans "Entrar" %}</h4>
+                </div>
+            </div>
+
+            <form class="login form-horizontal form-bordered panel panel-default" method="POST" action="#">
+              {% csrf_token %}
+              <div class="panel-body">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">{{ form.username.label}}</label>
+                    <div class="col-sm-8">
+                        {{ form.username}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4">{{ form.password.label}}</label>
+                    <div class="col-sm-8">
+                        {{ form.password}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4"></label>
+                    <div class="col-sm-8">
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        <button class="btn btn-primary" type="submit">{% trans "Entrar" %}</button>
+                    </div>
+                </div>
+              </div>
+      
+              <div class="panel-footer">
+
+              </div>
+            </form>
+
+
+
+        </div>
+    </div>
+    <!-- END Row -->
+</div>
+<!--/ END Template Container -->
+
+{% endblock %}

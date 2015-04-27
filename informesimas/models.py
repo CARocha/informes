@@ -31,16 +31,29 @@ class Presupuesto(models.Model):
 
 	porcentaje = models.FloatField(editable=False, null=True, blank=True)
 
+	def save(self, *args, **kwargs):
+		
+		self.porcentaje = (self.ingreso_acumulado / self.presupuesto_aprobado) * 100
+		 
+		super(Presupuesto, self).save(*args, **kwargs)
+
 	class Meta:
 		verbose_name = 'Presupuesto vs ingreso'
 		verbose_name_plural = 'Presupuestos vs ingresos'
+
 
 class Ingreso(models.Model):
 	tablero = models.ForeignKey(Tablero)
 	donante = models.ForeignKey(Organismos)
 	ingreso = models.FloatField()
 
-	total = models.FloatField(editable=False, null=True, blank=True)
+	total = models.FloatField(null=True, blank=True)
+
+	def save(self, *args, **kwargs):
+		
+		self.total += self.ingreso
+		
+		super(Ingreso, self).save(*args, **kwargs)
 
 	class Meta:
 		verbose_name = 'Ingreso por tipo de donante/proyecto'

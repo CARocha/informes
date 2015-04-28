@@ -4,6 +4,17 @@
 
 {% block extra_js %}
 <script src="{% static 'js/highcharts.js' %}"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $("#id_fecha_inicio").datepicker({ dateFormat: 'yy-mm-dd', dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'], monthNamesShort: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],yearRange:"2009:2015",changeMonth: true, changeYear: true});
+
+    $("#id_fecha_final").datepicker({ dateFormat: 'yy-mm-dd', dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'], monthNamesShort: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],yearRange:"2009:2015",changeMonth: true, changeYear: true});
+
+});
+</script>
 <script>
 //primer grafico
 $(function () {
@@ -236,7 +247,12 @@ $(function () {
         	
         </form>
           <h1 class="page-header">Tablero de Gestión -SIMAS</h1>
-		
+		  Consultar por fecha: <form action="." method="POST"> {% csrf_token %}
+            {{form}}
+            <input type="submit" value="Consultar"/>      
+          </form> 
+        {% if request.session.activo %}
+            
 		 <h2 class="sub-header">*</h2>
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-6 placeholder">
@@ -268,7 +284,7 @@ $(function () {
             </div>
             
           </div>
-
+        {% endif %}
         </div> <!-- main -->
       </div> <!-- row -->
     </div> <!-- container fluid -->

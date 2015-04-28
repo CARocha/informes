@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
-from .views import index_view
+from .views import index_view, consultar
 
 urlpatterns = [
 
-    url(r'^$', index_view, name='index'),
+    url(r'^$', consultar, name='consultar'),
 ]

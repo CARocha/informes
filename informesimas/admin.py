@@ -55,12 +55,12 @@ class TableroAdmin(admin.ModelAdmin):
     #        print inline(self.model, self.admin_site)
     #    return [inline(self.model, self.admin_site) for inline in self.inlines]
 
-    def save_formset(self, request, form, formset, change):
-        instances = formset.save(commit=False)
+    #def save_formset(self, request, form, formset, change):
+    #    instances = formset.save(commit=False)
         
-        for instance in instances:
-            instance.save()
-        formset.save_m2m()
+    #    for instance in instances:
+    #        instance.save()
+    #    formset.save_m2m()
     
     #def save_related(self, request, form, formsets, change):
     #    print formsets

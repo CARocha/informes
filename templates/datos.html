@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block extra_js %}
+<script src="{% static 'js/highcharts.js' %}"></script>
+
+<script>
+//primer grafico
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Presupuesto vrs Ingreso'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+        series: [{
+            type: 'pie',
+            name: 'C$',
+            data: [ 
+	            	['Presupuesto aprobado',   {{presupuesto1.presupuesto_aprobado}}],
+	                ['Ingreso acumulado',       {{presupuesto1.ingreso_acumulado}}],
+            	]
+        }]
+    });
+});
+
+// fin primer grafico
+$(function () {
+    $('#container1').highcharts({
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'Ingreso por tipo de donante/proyecto'
+        },
+        subtitle: {
+            text: 'simas'
+        },
+        xAxis: {
+            categories: [{% for obj in ingresos %}
+            				'{{obj.donante}}' {% if not forloop.last %},{% endif %}
+            			{% endfor %}],
+            title: {
+                text: null
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '(u$)',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+        tooltip: {
+            valueSuffix: ' millions'
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 100,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+            shadow: true
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'US$',
+            data: [{% for x in ingresos %}
+            			{{x.ingreso}},
+            		{% endfor %}]
+        },
+        ]
+    });
+});
+// grafico
+$(function () {
+    $('#container2').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Servicios de consultorias contratadas'
+        },
+        subtitle: {
+            text: 'simas'
+        },
+        xAxis: {
+            type: 'category',
+            labels: {
+                rotation: -45,
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '(US$)'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: 'US$: <b>{point.y:.1f}</b>'
+        },
+        series: [{
+            name: 'Servicios',
+            data: [{% for obj in servicios %}
+            			['{{obj.organizacion}}', {{obj.monto}}],
+            		{% endfor %}    
+            ],
+            dataLabels: {
+                enabled: true,
+                rotation: -90,
+                color: '#FFFFFF',
+                align: 'right',
+                format: '{point.y:.1f}', // one decimal
+                y: 10, // 10 pixels down from the top
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        }]
+    });
+});
+// fin grafico
+// graficos gastos mensuales
+$(function () {
+    $('#container3').highcharts({
+        title: {
+            text: 'Gastos mensuales',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'simas',
+            x: -20
+        },
+        xAxis: {
+            categories: [{% for obj in gastos %}
+            				'{{obj.get_mes_display}}',
+            			{% endfor %}]
+        },
+        yAxis: {
+            title: {
+                text: '(US$)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: 'US$'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'simas',
+            data: [{% for obj in gastos %}
+            		{{obj.monto}},	
+            	{% endfor %}]
+        }]
+    });
+});
+// fin de gastos mensuales
+</script>
+{% endblock extra_js %}
+
+{% block contenido %}
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="/">Inicio <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">Menu1</a></li>
+            <li><a href="#">Menu2</a></li>
+            <li><a href="#">Menu3</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Tablero de Gestión -SIMAS</h1> <a href="/">Volver a consultar</a>
+		 
+        {{presupuesto1}}
+            
+		 <h2 class="sub-header">*</h2>
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-6 placeholder">
+              <div id="container"></div>
+            </div>
+            <div class="col-xs-6 col-sm-6 placeholder">
+              <div id="container1"></div>
+            </div>
+            
+          </div>
+
+          <h2 class="sub-header">*</h2>
+          	<div class="row">
+           		<div id="container2"></div>
+          	</div>
+
+        <h2 class="sub-header">*</h2>
+          	<div class="row">
+           		<div id="container3"></div>
+          	</div>
+
+        <h2 class="sub-header">*</h2>
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-6 placeholder">
+              <div id="container4"></div>
+            </div>
+            <div class="col-xs-6 col-sm-6 placeholder">
+              <div id="container5"></div>
+            </div>
+            
+          </div>
+        
+        </div> <!-- main -->
+      </div> <!-- row -->
+    </div> <!-- container fluid -->
+
+{% endblock contenido %}

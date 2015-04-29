@@ -47,13 +47,13 @@ class Ingreso(models.Model):
 	donante = models.ForeignKey(Organismos)
 	ingreso = models.FloatField()
 
-	total = models.FloatField(null=True, blank=True)
+	total = models.FloatField(editable=False, null=True, blank=True)
 
-	def save(self, *args, **kwargs):
+	# def save(self, *args, **kwargs):
 		
-		self.total += self.ingreso
+	# 	self.total += self.ingreso
 		
-		super(Ingreso, self).save(*args, **kwargs)
+	# 	super(Ingreso, self).save(*args, **kwargs)
 
 	class Meta:
 		verbose_name = 'Ingreso por tipo de donante/proyecto'

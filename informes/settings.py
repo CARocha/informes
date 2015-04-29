@@ -91,7 +91,7 @@ LOGOUT_URL = '/'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
         'django.contrib.auth.context_processors.auth',
-        "allauth.account.context_processors.account",
+        #"allauth.account.context_processors.account",
         #"allauth.socialaccount.context_processors.socialaccount",
         'django.core.context_processors.debug',
         'django.core.context_processors.i18n',
@@ -102,3 +102,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
         'django.core.context_processors.request',
         # Your stuff: custom template context processers go here
     )
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

@@ -33,7 +33,7 @@ class Presupuesto(models.Model):
 
 	def save(self, *args, **kwargs):
 		
-		self.porcentaje = (self.ingreso_acumulado / self.presupuesto_aprobado) * 100
+		#self.porcentaje = (self.ingreso_acumulado / self.presupuesto_aprobado) * 100
 		 
 		super(Presupuesto, self).save(*args, **kwargs)
 

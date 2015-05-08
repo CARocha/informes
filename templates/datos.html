@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load staticfiles %}
+{% load humanize %}
 
 {% block extra_js %}
 <script src="{% static 'js/highcharts.js' %}"></script>
@@ -45,7 +46,7 @@ $(function () {
             },
         series: [{
             type: 'pie',
-            name: 'C$',
+            name: '-',
             data: [ 
 	            	['Presupuesto aprobado',   {{presupuesto1.presupuesto_aprobado}}],
 	                ['Ingreso acumulado',       {{presupuesto1.ingreso_acumulado}}],
@@ -67,8 +68,8 @@ $(function () {
             text: 'simas'
         },
         xAxis: {
-            categories: [{% for obj in ingresos %}
-            				'{{obj.donante}}' {% if not forloop.last %},{% endif %}
+            categories: [{% for obj,valor in ingreso_dicc.items %}
+            				'{{obj}}' {% if not forloop.last %},{% endif %}
             			{% endfor %}],
             title: {
                 text: null
@@ -85,7 +86,7 @@ $(function () {
             }
         },
         tooltip: {
-            valueSuffix: ' millions'
+            valueSuffix: ''
         },
         plotOptions: {
             bar: {
@@ -110,8 +111,12 @@ $(function () {
         },
         series: [{
             name: 'US$',
-            data: [{% for x in ingresos %}
-            			{{x.ingreso}},
+            data: [{% for x,y in ingreso_dicc.items %}
+            			{% if y.ingresOrgnanismo == None %}
+                            0,
+                        {%else%}
+                            {{y.ingresOrgnanismo}},
+                        {% endif %}        
             		{% endfor %}]
         },
         ]
@@ -235,12 +240,13 @@ $(function () {
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Tablero de Gestión -SIMAS</h1> <a href="/">Volver a consultar</a>
 		 
-        {{presupuesto1}}
             
 		 <h2 class="sub-header">*</h2>
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-6 placeholder">
               <div id="container"></div>
+              <h4>Ingreso acumulado: <b>${{presupuesto1.ingreso_acumulado|intcomma}}</b></h4>
+              <h4>Total presupuesto: <b>${{presupuesto1.presupuesto_aprobado|intcomma}}</b></h4>
             </div>
             <div class="col-xs-6 col-sm-6 placeholder">
               <div id="container1"></div>
@@ -250,11 +256,15 @@ $(function () {
 
           <h2 class="sub-header">*</h2>
           	<div class="row">
+            <h4>Total de contratos: <b>${{acumulado_servicio.total|intcomma}}</b></h4>
+            <h4>Promedio: <b>${{acumulado_servicio.promedio|intcomma}}</b></h4>
            		<div id="container2"></div>
           	</div>
 
         <h2 class="sub-header">*</h2>
           	<div class="row">
+            <h4>Total de gasto acumulado: <b>${{gasto_acumulado.total|intcomma}}</b></h4>
+            <h4>Promedio: <b>${{gasto_acumulado.promedio|intcomma}}</b></h4>
            		<div id="container3"></div>
           	</div>
 
@@ -266,6 +276,17 @@ $(function () {
             <div class="col-xs-6 col-sm-6 placeholder">
               <div id="container5"></div>
             </div>
+            
+          </div>
+
+        <h2 class="sub-header">*</h2>
+          <div class="row placeholders">
+          {% for obj in disponibilidad %}
+            <div class="col-xs-4 col-sm-4 placeholder">
+              {{obj.disponible}}-{{obj.tablero.fecha|date:"m-Y"}} <br>
+              <b>$: {{obj.monto|intcomma}}</b>
+            </div>
+          {% endfor %}
             
           </div>
         
